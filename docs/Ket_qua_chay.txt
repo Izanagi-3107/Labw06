@@ -1,0 +1,181 @@
+LAB W06 - QUẢN LÝ THIẾT BỊ VÀ PHIẾU MƯỢN
+Ngô Ngọc Thái - 202418984
+
+1. THIẾT BỊ VÀ CHI PHÍ BẢO TRÌ
+MC01 | Điều khiển máy chiếu | Năm: 2024 | Giá: 500.000 VND | Available
+DH01 | Điều khiển điều hòa | Năm: 2023 | Giá: 300.000 VND | Available
+MIC01 | Micro không dây | Năm: 2020 | Giá: 1.500.000 VND | Available
+Tổng chi phí bảo trì năm: 157.000 VND
+Thiết bị cần bảo trì:
+  DH01 - Điều khiển điều hòa
+  MIC01 - Micro không dây
+
+2. MƯỢN VÀ TRẢ THIẾT BỊ
+PM01 | Nguyễn Văn An | Phòng B101 | 17/10/2026 | 2 thiết bị
+  MC01 | Tiết 1-5 | Hạn: 19/10/2026 | Chưa trả
+  MIC01 | Tiết 1-3 | Hạn: 18/10/2026 | Chưa trả
+Sau khi mượn: MC01=Borrowed, MIC01=Borrowed
+MC01 trả đúng hạn: 0 VND
+MIC01 trả muộn 2 ngày: 40.000 VND
+Tổng phí trả muộn PM01: 40.000 VND
+Sau khi trả: MC01=Available, MIC01=Available
+
+3. TRA CỨU PHIẾU ĐẾN 20/10/2026
+Phiếu có thiết bị trả muộn hoặc đang quá hạn:
+  PM01 | Phí đến ngày tra cứu: 40.000 VND
+  PM02 | Phí đến ngày tra cứu: 10.000 VND
+Phiếu còn thiết bị chưa trả:
+  PM02 | Nguyễn Văn An | Phòng B102 | 17/10/2026 | 1 thiết bị
+    DH01 | Tiết 2-4 | Hạn: 19/10/2026 | Chưa trả
+
+4. KIỂM THỬ CHỨC NĂNG VÀ NGOẠI LỆ
+
+01 Luồng thành công và phí trả muộn
+  [ĐẠT]
+
+02 Mượn thiết bị đang bảo trì
+  Bắt DeviceUnavailableException: Thiết bị DH01 không sẵn sàng. Trạng thái: UnderMaintenance.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+03 Trợ giảng mượn thiết bị thứ ba
+  Bắt BorrowLimitExceededException: Người mượn TG01 chỉ được mượn tối đa 2 thiết bị trên một phiếu.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+04 Thêm cùng một micro hai lần
+  Bắt DuplicateDeviceException: Thiết bị MIC01 đã tồn tại trong phiếu mượn.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+05 Mượn micro 3 ngày vượt giới hạn 1 ngày
+  Bắt InvalidBorrowPeriodException: Thiết bị MIC01: yêu cầu 3 ngày; số ngày hợp lệ từ 1 đến 1.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+06 Trả thiết bị không thuộc phiếu
+  Bắt DeviceNotInSlipException: Thiết bị MC01 không thuộc phiếu PM01.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+07 Trả một thiết bị hai lần
+  Bắt DeviceAlreadyReturnedException: Thiết bị MC01 đã được trả trước đó.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+08 Ngày trả trước ngày mượn
+  Bắt InvalidReturnDateException: Thiết bị MIC01: ngày trả 16/10/2026 trước ngày mượn 17/10/2026.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+09 Số ngày mượn bằng 0 hoặc âm
+  Bắt InvalidBorrowPeriodException: Thiết bị MIC01: yêu cầu 0 ngày; số ngày hợp lệ từ 1 đến 1.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  Bắt InvalidBorrowPeriodException: Thiết bị MIC01: yêu cầu -1 ngày; số ngày hợp lệ từ 1 đến 1.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+10 Thiết bị null khi thêm vào phiếu
+  Bắt ArgumentNullException: Value cannot be null. (Parameter 'device')
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+11 Thiết bị đang được mượn ở phiếu khác
+  Bắt DeviceUnavailableException: Thiết bị MIC01 không sẵn sàng. Trạng thái: Borrowed.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+12 Tiết bắt đầu không dương
+  Bắt InvalidBorrowPeriodException: Thiết bị MIC01: tiết 0 đến 2 không hợp lệ; tối đa 3 tiết liên tiếp mỗi ngày.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+13 Tiết kết thúc trước tiết bắt đầu
+  Bắt InvalidBorrowPeriodException: Thiết bị MIC01: tiết 4 đến 2 không hợp lệ; tối đa 3 tiết liên tiếp mỗi ngày.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+14 Số tiết vượt giới hạn
+  Bắt InvalidBorrowPeriodException: Thiết bị MIC01: tiết 1 đến 4 không hợp lệ; tối đa 3 tiết liên tiếp mỗi ngày.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+15 Trả trong ngày mượn và đúng hạn
+  [ĐẠT]
+
+16 Tràn phạm vi DateTime không làm đổi trạng thái
+  Bắt InvalidBorrowPeriodException: Không thể xác định hạn trả của thiết bị MIC01 trong phạm vi ngày hợp lệ.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+17 Phòng học từ chối mã thiết bị trùng
+  Bắt DuplicateDeviceException: Thiết bị mic01 đã tồn tại trong phòng học.
+  [ĐẠT]
+
+18 Phòng học từ chối thiết bị null
+  Bắt ArgumentNullException: Value cannot be null. (Parameter 'device')
+  [ĐẠT]
+
+19 Tính đa hình chi phí bảo trì
+  [ĐẠT]
+
+20 Lọc thiết bị bảo trì và biên sử dụng 5 năm
+  [ĐẠT]
+
+21 Gỡ thiết bị khỏi phòng vẫn giữ đối tượng
+  [ĐẠT]
+
+22 Ràng buộc dữ liệu thiết bị
+  Bắt ArgumentException: Mã thiết bị không được rỗng. (Parameter 'deviceId')
+  Bắt ArgumentException: Tên thiết bị không được rỗng. (Parameter 'name')
+  Bắt ArgumentOutOfRangeException: Giá mua phải lớn hơn 0. (Parameter 'purchasePrice')
+  Bắt ArgumentOutOfRangeException: Năm sử dụng không hợp lệ. (Parameter 'yearOfUse')
+  [ĐẠT]
+
+23 Ràng buộc người mượn phiếu và phòng
+  Bắt ArgumentException: Mã giảng viên không được rỗng. (Parameter 'borrowerId')
+  Bắt ArgumentException: Họ tên không được rỗng. (Parameter 'fullName')
+  Bắt ArgumentException: Mã phiếu không được rỗng. (Parameter 'slipId')
+  Bắt ArgumentNullException: Value cannot be null. (Parameter 'borrower')
+  Bắt ArgumentException: Phòng dạy không được rỗng. (Parameter 'teachingRoom')
+  Bắt ArgumentOutOfRangeException: Sức chứa phải lớn hơn 0. (Parameter 'capacity')
+  [ĐẠT]
+
+24 Danh sách công khai chỉ đọc
+  Bắt NotSupportedException: Collection is read-only.
+  Bắt NotSupportedException: Collection is read-only.
+  [ĐẠT]
+
+25 Giảng viên mượn tối đa 3 thiết bị
+  Bắt BorrowLimitExceededException: Người mượn GV01 chỉ được mượn tối đa 3 thiết bị trên một phiếu.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+26 Mã thiết bị không phân biệt hoa thường
+  Bắt DuplicateDeviceException: Thiết bị mic01 đã tồn tại trong phiếu mượn.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+27 Phân biệt chưa trả và quá hạn
+  [ĐẠT]
+
+28 Không thêm lại thiết bị đã có lịch sử trên phiếu
+  Bắt DuplicateDeviceException: Thiết bị MIC01 đã tồn tại trong phiếu mượn.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+29 Trả lại phiếu cũ không ảnh hưởng lần mượn mới
+  Bắt DeviceAlreadyReturnedException: Thiết bị MIC01 đã được trả trước đó.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+30 BorrowItem kiểm tra null hạn trả và trả trực tiếp
+  Bắt ArgumentNullException: Value cannot be null. (Parameter 'device')
+  Bắt ArgumentException: Hạn trả không được trước ngày mượn. (Parameter 'dueDate')
+  Bắt DeviceAlreadyReturnedException: Thiết bị MIC01 đã được trả trước đó.
+  Trạng thái thiết bị và phiếu được giữ nguyên.
+  [ĐẠT]
+
+KẾT QUẢ: 30/30 ca đạt; 0 ca lỗi.
+
+Đã kết thúc xử lý chương trình.
